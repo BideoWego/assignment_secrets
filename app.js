@@ -85,11 +85,31 @@ app.use(morganToolkit());
 
 
 // ----------------------------------------
+// Mongoose
+// ----------------------------------------
+const mongoose = require('mongoose');
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState) {
+    next();
+  } else {
+    require('./mongo')().then(() => next());
+  }
+});
+
+
+
+// ----------------------------------------
 // Routes
 // ----------------------------------------
-app.use('/', (req, res) => {
-  req.flash('Hi!');
-  res.render('welcome/index');
+const { User } = require('./models');
+
+app.use('/', async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.render('welcome/index', { users });
+  } catch (e) {
+    next(e);
+  }
 });
 
 

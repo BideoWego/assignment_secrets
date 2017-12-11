@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "seeds": "node seeds",
+    "seed": "npm run seeds"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,8 @@
   },
   "homepage": "https://github.com/BideoWego/assignment_secrets#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^4.0.0",
@@ -31,6 +35,9 @@
     "load-helpers": "^1.0.1",
     "lodash": "^4.17.4",
     "method-override": "^2.3.10",
+    "mongoose": "^4.13.6",
+    "mongoose-unique-validator": "^1.0.6",
+    "mongooseeder": "^2.0.6",
     "morgan": "^1.9.0",
     "morgan-toolkit": "^1.0.2"
   }

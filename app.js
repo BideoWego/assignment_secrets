@@ -82,7 +82,7 @@ app.use(express.static(`${__dirname}/public`));
 // ----------------------------------------
 const morgan = require('morgan');
 const morganToolkit = require('morgan-toolkit')(morgan, {
-  req: ['cookies']
+  req: ['cookies'/*, 'signedCookies' */]
 });
 
 app.use(morganToolkit());

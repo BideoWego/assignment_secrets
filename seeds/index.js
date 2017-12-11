@@ -11,7 +11,7 @@ const seeds = () => {
   const users = [];
   for (let i = 0; i < 10; i++) {
     const user = new User({
-      email: `george_costanza${ i }@example.com`,
+      email: `foobar${ i }@gmail.com`,
       password: "password"
     });
     users.push(user);

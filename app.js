@@ -111,7 +111,7 @@ app.use(loginMiddleware);
 
 app.get('/', loggedInOnly, async (req, res, next) => {
   try {
-    res.render('welcome/index');
+    res.render('secrets/index');
   } catch (e) {
     next(e);
   }

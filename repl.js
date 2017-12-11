@@ -2,7 +2,7 @@ const repl = require('repl').start({});
 const lodash = require('lodash');
 const helpers = require('./helpers');
 const mongoose = require('mongoose');
-const models = require('./models/mongoose');
+const models = require('./models');
 
 
 
@@ -27,7 +27,7 @@ require('./mongo')().then(() => {
   // Models
   // ----------------------------------------
   repl.context.models = models;
-  Object.keys(models.mongoose).forEach((modelName) => {
+  Object.keys(models).forEach(modelName => {
     repl.context[modelName] = mongoose.model(modelName);
   });
 

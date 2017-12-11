@@ -105,16 +105,10 @@ app.use((req, res, next) => {
 // ----------------------------------------
 // Routes
 // ----------------------------------------
-const { User } = require('./models');
-const {
-  createSignedSessionId,
-  loginMiddleware,
-  loggedInOnly,
-  loggedOutOnly
-} = require("./services/session");
-
-
+const { loginMiddleware, loggedInOnly } = require("./services/session");
 app.use(loginMiddleware);
+
+
 app.get('/', loggedInOnly, async (req, res, next) => {
   try {
     res.render('welcome/index');
@@ -124,68 +118,11 @@ app.get('/', loggedInOnly, async (req, res, next) => {
 });
 
 
-app.get("/login", loggedOutOnly, (req, res) => {
-  console.log(req.user);
-  res.render("sessions/new");
-});
+const sessionsRouter = require('./routers/sessions');
+app.use('/', sessionsRouter);
 
-app.post("/login", async (req, res, next) => {
-  // 3
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-      req.flash('error', 'User not found');
-      return res.redirect('/login');
-    }
-
-    // 4
-    if (user.validatePassword(password)) {
-      const sessionId = createSignedSessionId(email);
-      res.cookie("sessionId", sessionId);
-      return res.redirect("/");
-    }
-
-    req.flash('error', 'Invalid password');
-    res.redirect('/login');
-  } catch (e) {
-    next(e);
-  }
-});
-
-
-app.get("/register", loggedOutOnly, (req, res) => {
-  res.render("users/new");
-});
-
-app.post("/register", async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-
-    // Here we create a new user.
-    // This virtual password field will automatically hash our password, as we
-    // previously discussed.
-    const user = new User({ email, password });
-    await user.save();
-
-    // Once the user is created, we create the sessionId and redirect, just as
-    // we did in the login POST route
-    const sessionId = createSignedSessionId(email);
-    res.cookie("sessionId", sessionId);
-    res.redirect("/");
-  } catch (e) {
-    next(e);
-  }
-});
-
-
-
-app.get("/logout", (req, res) => {
-  req.session = null;
-  res.cookie("sessionId", "", { expires: new Date() });
-  res.redirect("/login");
-});
-
+const usersRouter = require('./routers/users');
+app.use('/', usersRouter);
 
 
 

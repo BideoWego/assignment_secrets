@@ -17,6 +17,9 @@ const models = {};
 
 // Require models here
 models.User = require('./user');
+models.Secret = require('./secret');
+models.Request = require('./request');
+models.Permission = require('./permission');
 
 
 module.exports = models;

@@ -105,13 +105,16 @@ app.use((req, res, next) => {
 // ----------------------------------------
 // Routes
 // ----------------------------------------
+const { Secret } = require('./models');
 const { loginMiddleware, loggedInOnly } = require("./services/session");
 app.use(loginMiddleware);
 
 
 app.get('/', loggedInOnly, async (req, res, next) => {
   try {
-    res.render('secrets/index');
+    const secrets = await Secret.find()
+      .populate('user permissions requests');
+    res.render('secrets/index', { secrets });
   } catch (e) {
     next(e);
   }

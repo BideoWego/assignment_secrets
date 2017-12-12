@@ -5,6 +5,26 @@ const { createSignedSessionId, loggedOutOnly } = require("../services/session");
 
 
 // ----------------------------------------
+// Show
+// ----------------------------------------
+router.get('/user', async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: 'permissions requests secrets',
+        populate: {
+          path: 'user secret requests permissions'
+        }
+      });
+    debugger;
+    res.render('users/show', { user });
+  } catch (e) {
+    next(e);
+  }
+});
+
+
+// ----------------------------------------
 // Create
 // ----------------------------------------
 router.post("/users", async (req, res, next) => {
@@ -26,18 +46,6 @@ router.post("/users", async (req, res, next) => {
     next(e);
   }
 });
-
-
-// ----------------------------------------
-// Destroy
-// ----------------------------------------
-const onDestroy = (req, res) => {
-  req.session = null;
-  res.cookie("sessionId", "", { expires: new Date() });
-  res.redirect("/login");
-};
-router.get("/logout", onDestroy);
-router.delete("/logout", onDestroy);
 
 
 module.exports = router;

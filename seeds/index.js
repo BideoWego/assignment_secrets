@@ -1,5 +1,10 @@
 const models = require('../models/');
-const { User } = models;
+const {
+  User,
+  Secret,
+  Request,
+  Permission
+ } = models;
 
 
 // ----------------------------------------
@@ -7,6 +12,9 @@ const { User } = models;
 // ----------------------------------------
 const seeds = () => {
 
+  // ----------------------------------------
+  // Users
+  // ----------------------------------------
   console.log('Creating Users');
   const users = [];
   for (let i = 0; i < 10; i++) {
@@ -19,12 +27,63 @@ const seeds = () => {
 
 
   // ----------------------------------------
+  // Secret
+  // ----------------------------------------
+  console.log('Creating Secrets');
+  const secrets = [];
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i];
+    for (let j = 0; j < 5; j++) {
+      const secret = new Secret({
+        body: `Secret ${ j } - ${ user.email }`,
+        user: user
+      });
+      user.secrets.push(secret);
+      secrets.push(secret);
+    }
+  }
+
+
+  // ----------------------------------------
+  // Requests
+  // ----------------------------------------
+  console.log('Creating Requests');
+  const requests = [];
+  var secret = secrets[1];
+  var user = users[0];
+  const request = new Request({
+    secret: secret,
+    user: user
+  });
+  secret.requests.push(request);
+  user.requests.push(request);
+  requests.push(request);
+
+
+  // ----------------------------------------
+  // Permissions
+  // ----------------------------------------
+  console.log('Creating Permissions');
+  const permissions = [];
+  const permission = new Permission({
+    secret: secrets[2],
+    user: users[0]
+  });
+  secret.permissions.push(permission);
+  user.permissions.push(permission);
+  permissions.push(permission);
+
+
+  // ----------------------------------------
   // Save Models
   // ----------------------------------------
   const promises = [];
   const collections = [
     // Arrays of model instances here
-    users
+    users,
+    secrets,
+    requests,
+    permissions
   ];
 
   collections.forEach(collection => {

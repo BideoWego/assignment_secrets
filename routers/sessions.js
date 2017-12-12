@@ -48,4 +48,16 @@ router.get(["/register", "/users/new"], loggedOutOnly, (req, res) => {
 });
 
 
+// ----------------------------------------
+// Destroy
+// ----------------------------------------
+const onDestroy = (req, res) => {
+  req.session = null;
+  res.cookie("sessionId", "", { expires: new Date() });
+  res.redirect("/login");
+};
+router.get("/logout", onDestroy);
+router.delete("/logout", onDestroy);
+
+
 module.exports = router;
